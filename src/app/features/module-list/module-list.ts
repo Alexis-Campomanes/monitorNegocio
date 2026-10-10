@@ -58,9 +58,16 @@ export class ModuleList {
     const mod = this.mod();
     const q = this.search().trim().toLowerCase();
     const filter = this.filter();
-    return this.all()
+    const records = this.all()
       .filter((r) => filter === 'Todos' || fieldOf(r, mod.filterKey) === filter)
-      .filter((r) => !q || mod.cols.some((c) => c.get(r).toLowerCase().includes(q)))
+      .filter((r) => !q || mod.cols.some((c) => c.get(r).toLowerCase().includes(q)));
+    if (mod.orderBy) {
+      const { key, dir } = mod.orderBy;
+      const sign = dir === 'desc' ? -1 : 1;
+      // numeric: true para que "10" vaya después de "9".
+      records.sort((a, b) => sign * String(fieldOf(a, key)).localeCompare(String(fieldOf(b, key)), undefined, { numeric: true }));
+    }
+    return records
       .map((record) => {
         const cells: Record<string, Cell> = {};
         for (const c of mod.cols) {

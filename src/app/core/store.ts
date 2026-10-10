@@ -1,7 +1,10 @@
+import { HttpErrorResponse } from '@angular/common/http';
 import { computed, effect, inject, Injectable, signal } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { catchError, map, Observable, of } from 'rxjs';
+import { Api, LoginRespuesta, toRol } from './api';
 import { nowStamp, today } from './format';
-import { AnyRecord, Db, ModuleId, Pedido, Usuario } from './models';
+import { Auditoria, AnyRecord, Db, ModuleId, Pedido, Usuario } from './models';
 import { buildModules } from './modules';
 import { SEED } from './seed';
 
@@ -30,6 +33,7 @@ export interface SaveResult {
 @Injectable({ providedIn: 'root' })
 export class Store {
   private readonly snackBar = inject(MatSnackBar);
+  private readonly api = inject(Api);
   private readonly initial = load();
 
   readonly db = signal<Db>(this.initial?.db ?? structuredClone(SEED));
@@ -54,38 +58,57 @@ export class Store {
         // Sin almacenamiento disponible: el estado vive solo en memoria.
       }
     });
+    this.loadFromApi();
+  }
+
+  /** Reemplaza usuarios, clientes, proveedores, materiales, pedidos y auditoría con los del backend. */
+  private loadFromApi(): void {
+    this.api.loadDb().subscribe({
+      next: (remote) => this.db.update((d) => ({ ...d, ...remote })),
+      error: () => this.flash('No se pudo conectar con el backend. Trabajando con datos locales.'),
+    });
   }
 
   flash(msg: string): void {
     this.snackBar.open(msg, undefined, { duration: 2400, panelClass: 'app-toast' });
   }
 
-  private log(data: Db, modulo: string, accion: string, detalle: string, user?: Usuario | null): Db {
-    const u = user ?? this.user();
-    const entry = {
+  /** Registra una acción local con las mismas columnas que la auditoría del backend. */
+  private log(data: Db, tablaAfectada: string, accion: string, registroId: string): Db {
+    const entry: Auditoria = {
       id: 'a' + Date.now() + Math.random(),
-      fecha: nowStamp(),
-      usuario: u ? u.nombre : '—',
-      modulo,
+      hostIp: '—',
       accion,
-      detalle,
+      tablaAfectada,
+      registroId,
+      fechaHora: nowStamp(),
     };
     return { ...data, auditoria: [entry, ...data.auditoria] };
   }
 
-  login(email: string, password: string): string | null {
+  /** Valida contra el backend. Emite null si entra, o el mensaje de error para mostrar. */
+  login(codVendedor: string, password: string): Observable<string | null> {
+    return this.api.login(codVendedor.trim(), password).pipe(
+      map((r) => {
+        this.startSession(r);
+        return null;
+      }),
+      catchError((err: HttpErrorResponse) => of(
+        err.status === 0 ? 'No se pudo conectar con el backend.' : (err.error?.mensaje ?? 'No se pudo iniciar sesión.'),
+      )),
+    );
+  }
+
+  private startSession(r: LoginRespuesta): void {
+    const u: Usuario = {
+      id: r.codVendedor, nombre: r.dscVendedor, email: '', rol: toRol(r.rolId), ultimo: nowStamp(), estado: 'Activo',
+    };
     const data = this.db();
-    const u = data.usuarios.find((x) => x.email.toLowerCase() === email.trim().toLowerCase());
-    if (!u) return 'No encontramos una cuenta con ese correo.';
-    if (u.estado !== 'Activo') return 'Esta cuenta está inactiva. Contacta a un administrador.';
-    if (password.length < 4) return 'La contraseña debe tener al menos 4 caracteres.';
-    const ultimo = nowStamp();
-    let nd: Db = { ...data, usuarios: data.usuarios.map((x) => (x.id === u.id ? { ...x, ultimo } : x)) };
-    nd = this.log(nd, 'Sesión', 'Inició sesión', 'Acceso desde navegador web', u);
+    let nd: Db = { ...data, usuarios: [u, ...data.usuarios.filter((x) => x.id !== u.id)] };
+    nd = this.log(nd, 'Sesión', 'Inició sesión', 'Acceso desde navegador web');
     this.db.set(nd);
     this.userId.set(u.id);
     this.flash(`Bienvenido, ${u.nombre.split(' ')[0]}`);
-    return null;
   }
 
   logout(): void {
@@ -133,6 +156,17 @@ export class Store {
       this.flash('Cambios guardados');
     }
     return {};
+  }
+
+  /** Trae los ítems del pedido desde el backend (su código es el id del pedido) y reemplaza los locales. */
+  loadOrderItems(orderId: string): void {
+    this.api.detalle(orderId).subscribe({
+      next: (items) => this.db.update((d) => ({
+        ...d,
+        pedidos: d.pedidos.map((o) => (o.id === orderId ? { ...o, items } : o)),
+      })),
+      error: () => this.flash('No se pudieron cargar los ítems del pedido.'),
+    });
   }
 
   /** Devuelve false si la eliminación no está permitida. */

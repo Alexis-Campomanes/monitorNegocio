@@ -1,4 +1,4 @@
-import { Component, computed, effect, inject, input, signal } from '@angular/core';
+import { Component, computed, effect, inject, input, signal, untracked } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
@@ -69,6 +69,12 @@ export class OrderDetail {
     // Si el pedido deja de existir (p. ej. se eliminó), vuelve al listado.
     effect(() => {
       if (!this.order()) this.router.navigate(['/pedidos']);
+    });
+
+    // Al abrir el detalle, trae los ítems del backend con el código del pedido.
+    effect(() => {
+      const codigoPedido = this.id();
+      untracked(() => this.store.loadOrderItems(codigoPedido));
     });
   }
 

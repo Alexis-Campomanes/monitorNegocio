@@ -21,6 +21,7 @@ export interface Cliente {
   id: string;
   nombre: string;
   ruc: string;
+  email?: string;
   contacto: string;
   telefono: string;
   ciudad: string;
@@ -34,6 +35,8 @@ export interface Proveedor {
   rubro: string;
   contacto: string;
   telefono: string;
+  email?: string;
+  direccion?: string;
   estado: Estado;
 }
 
@@ -60,17 +63,19 @@ export interface Pedido {
   codigo: string;
   clienteId: string;
   fecha: string;
+  /** Total que trae el listado del backend (montoTotal). Ausente en pedidos creados localmente. */
+  montoTotal?: number;
   estado: EstadoPedido;
   items: PedidoItem[];
 }
 
 export interface Auditoria {
   id: string;
-  fecha: string;
-  usuario: string;
-  modulo: string;
+  hostIp: string;
   accion: string;
-  detalle: string;
+  tablaAfectada: string;
+  registroId: string;
+  fechaHora: string;
 }
 
 export interface Db {

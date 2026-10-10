@@ -15,19 +15,19 @@
     <form class="form" (ngSubmit)="submit()">
       <div>
         <h2>Iniciar sesión</h2>
-        <p class="lead">Ingresa con tu cuenta corporativa</p>
+        <p class="lead">Ingresa con tu usuario y contraseña</p>
       </div>
 
       <mat-form-field>
-        <mat-label>Correo electrónico</mat-label>
-        <input matInput type="email" name="email" autocomplete="username" placeholder="nombre@empresa.com"
-          [(ngModel)]="email" (ngModelChange)="error.set('')" />
-        <mat-icon matPrefix>mail</mat-icon>
+        <mat-label>Usuario</mat-label>
+        <input matInput name="codVendedor" autocomplete="username" placeholder="370" maxlength="10"
+          [(ngModel)]="codVendedor" (ngModelChange)="error.set('')" />
+        <mat-icon matPrefix>badge</mat-icon>
       </mat-form-field>
 
       <mat-form-field>
         <mat-label>Contraseña</mat-label>
-        <input matInput name="password" autocomplete="current-password" placeholder="••••••••"
+        <input matInput name="password" autocomplete="current-password" placeholder="Ingrese Usuario" maxlength="4"
           [type]="showPassword() ? 'text' : 'password'" [(ngModel)]="password" (ngModelChange)="error.set('')" />
         <mat-icon matPrefix>lock</mat-icon>
         <button mat-icon-button matSuffix type="button" (click)="showPassword.set(!showPassword())"
@@ -42,10 +42,6 @@
 
       <button mat-flat-button class="btn-brand submit" type="submit">Ingresar</button>
 
-      <div class="demo">
-        <div class="demo-text">Cuenta demo<br /><strong>{{ demoEmail }}</strong></div>
-        <button mat-stroked-button type="button" (click)="fillDemo()">Usar demo</button>
-      </div>
     </form>
   </section>
 </div>
