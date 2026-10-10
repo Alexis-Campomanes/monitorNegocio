@@ -1,0 +1,19 @@
+.head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-right: 12px;
+  border-bottom: 1px solid var(--ink-100);
+  h2 {
+    font-weight: 700;
+  }
+}
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 16px;
+  padding-top: 20px !important;
+}
+.error {
+  margin: 0 24px 8px;
+}

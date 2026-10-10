@@ -1,0 +1,51 @@
+<div class="login">
+  <section class="hero">
+    <div class="brand">
+      <div class="brand-mark">N</div>
+      <div class="brand-name">NÚCLEO</div>
+    </div>
+    <div class="hero-copy">
+      <h1>Clientes, pedidos y materiales en un solo lugar.</h1>
+      <p>Controla tu operación diaria con trazabilidad completa de cada acción.</p>
+    </div>
+    <div class="copyright">© 2026 Núcleo</div>
+  </section>
+
+  <section class="form-side">
+    <form class="form" (ngSubmit)="submit()">
+      <div>
+        <h2>Iniciar sesión</h2>
+        <p class="lead">Ingresa con tu cuenta corporativa</p>
+      </div>
+
+      <mat-form-field>
+        <mat-label>Correo electrónico</mat-label>
+        <input matInput type="email" name="email" autocomplete="username" placeholder="nombre@empresa.com"
+          [(ngModel)]="email" (ngModelChange)="error.set('')" />
+        <mat-icon matPrefix>mail</mat-icon>
+      </mat-form-field>
+
+      <mat-form-field>
+        <mat-label>Contraseña</mat-label>
+        <input matInput name="password" autocomplete="current-password" placeholder="••••••••"
+          [type]="showPassword() ? 'text' : 'password'" [(ngModel)]="password" (ngModelChange)="error.set('')" />
+        <mat-icon matPrefix>lock</mat-icon>
+        <button mat-icon-button matSuffix type="button" (click)="showPassword.set(!showPassword())"
+          [attr.aria-label]="showPassword() ? 'Ocultar contraseña' : 'Mostrar contraseña'">
+          <mat-icon>{{ showPassword() ? 'visibility_off' : 'visibility' }}</mat-icon>
+        </button>
+      </mat-form-field>
+
+      @if (error()) {
+        <div class="alert-danger" role="alert">{{ error() }}</div>
+      }
+
+      <button mat-flat-button class="btn-brand submit" type="submit">Ingresar</button>
+
+      <div class="demo">
+        <div class="demo-text">Cuenta demo<br /><strong>{{ demoEmail }}</strong></div>
+        <button mat-stroked-button type="button" (click)="fillDemo()">Usar demo</button>
+      </div>
+    </form>
+  </section>
+</div>

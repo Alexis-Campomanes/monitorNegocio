@@ -1,1 +1,257 @@
-/* You can add global styles to this file, and also import other style files */
+@use '@angular/material' as mat;
+
+/* Sistema de diseño Núcleo — tokens tomados del diseño de Claude Design (styles.css). */
+:root {
+  --brand-900: #2a1848;
+  --brand-700: #3d2166;
+  --brand-600: #542f87;
+  --brand-500: #6e3fa8;
+  --brand-400: #8a5bc5;
+  --brand-50: #f3eff8;
+
+  --teal-700: #007f78;
+  --teal-600: #00b8ad;
+  --teal-500: #3ed0c7;
+  --teal-50: #e6f8f7;
+
+  --ink-900: #0f0a1a;
+  --ink-700: #3a2f42;
+  --ink-500: #6b6477;
+  --ink-400: #9b94a8;
+  --ink-300: #cfc9d6;
+  --ink-200: #e5e1eb;
+  --ink-100: #f3f0f7;
+  --ink-50: #faf9fc;
+  --white: #ffffff;
+
+  --success: #0b9e70;
+  --success-bg: #e6f7f0;
+  --warning: #c68a00;
+  --warning-bg: #fff4dc;
+  --danger: #d93146;
+  --danger-bg: #fdecee;
+  --info: #2563eb;
+  --info-bg: #e8f0fe;
+
+  --grad-brand: linear-gradient(135deg, #542f87 0%, #00b8ad 100%);
+
+  --sh-1: 0 1px 2px rgba(15, 10, 26, 0.06), 0 1px 1px rgba(15, 10, 26, 0.04);
+  --sh-2: 0 4px 12px rgba(15, 10, 26, 0.07), 0 2px 4px rgba(15, 10, 26, 0.04);
+  --sh-3: 0 12px 32px rgba(60, 16, 100, 0.12), 0 4px 8px rgba(15, 10, 26, 0.05);
+
+  --r-xs: 6px;
+  --r-sm: 10px;
+  --r-md: 14px;
+  --r-lg: 20px;
+
+  --ff: 'Roboto', -apple-system, system-ui, sans-serif;
+  --ff-mono: 'JetBrains Mono', monospace;
+}
+
+/* Tema de Angular Material ajustado a la marca. */
+html {
+  color-scheme: light;
+  @include mat.theme(
+    (
+      color: (
+        primary: mat.$violet-palette,
+        tertiary: mat.$cyan-palette,
+      ),
+      typography: Roboto,
+      density: 0,
+    )
+  );
+  @include mat.theme-overrides(
+    (
+      primary: #542f87,
+      on-primary: #ffffff,
+      primary-container: #f3eff8,
+      on-primary-container: #2a1848,
+      secondary-container: #f3eff8,
+      on-secondary-container: #542f87,
+      surface: #ffffff,
+      on-surface: #0f0a1a,
+      on-surface-variant: #6b6477,
+      surface-container: #ffffff,
+      surface-container-low: #ffffff,
+      surface-container-high: #ffffff,
+      surface-container-highest: #f3f0f7,
+      outline: #cfc9d6,
+      outline-variant: #e5e1eb,
+      error: #d93146,
+      inverse-surface: #0f0a1a,
+      inverse-on-surface: #ffffff,
+    )
+  );
+  @include mat.button-overrides(
+    (
+      filled-container-shape: var(--r-sm),
+      outlined-container-shape: var(--r-sm),
+      text-container-shape: var(--r-sm),
+    )
+  );
+  @include mat.form-field-overrides(
+    (
+      outlined-container-shape: var(--r-sm),
+      outlined-outline-color: var(--ink-200),
+      outlined-hover-outline-color: var(--ink-300),
+    )
+  );
+  @include mat.dialog-overrides((container-shape: var(--r-lg)));
+  @include mat.menu-overrides((container-shape: var(--r-md)));
+  @include mat.snack-bar-overrides((container-shape: var(--r-sm)));
+  @include mat.table-overrides(
+    (
+      header-headline-color: var(--ink-500),
+      header-headline-size: 12px,
+      header-headline-weight: 700,
+      row-item-outline-color: var(--ink-100),
+      row-item-label-text-size: 14px,
+    )
+  );
+}
+
+* {
+  box-sizing: border-box;
+}
+html,
+body {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+}
+body {
+  font-family: var(--ff);
+  background: var(--ink-50);
+  color: var(--ink-900);
+  -webkit-font-smoothing: antialiased;
+}
+
+@keyframes fadeUp {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+/* Utilidades compartidas */
+.mono {
+  font-family: var(--ff-mono);
+  font-size: 13px;
+}
+.tnum {
+  font-variant-numeric: tabular-nums;
+}
+.fade-up {
+  animation: fadeUp 0.2s ease;
+}
+
+.page {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  max-width: 1280px;
+  margin: 0 auto;
+}
+.page-title {
+  font-size: 28px;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  margin: 0;
+}
+.page-sub {
+  font-size: 14px;
+  color: var(--ink-500);
+  margin-top: 4px;
+}
+
+.panel {
+  background: var(--white);
+  border: 1px solid var(--ink-200);
+  border-radius: var(--r-md);
+}
+.panel-label {
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  color: var(--ink-500);
+}
+
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 3px 10px;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 700;
+  white-space: nowrap;
+
+  &::before {
+    content: '';
+    width: 6px;
+    height: 6px;
+    border-radius: 999px;
+    background: currentColor;
+  }
+}
+
+.alert-danger {
+  background: var(--danger-bg);
+  color: var(--danger);
+  font-size: 13px;
+  font-weight: 600;
+  padding: 10px 12px;
+  border-radius: var(--r-xs);
+}
+
+/* Botón principal con el degradado de marca (sobre mat-flat-button). */
+.mat-mdc-unelevated-button.btn-brand:not(:disabled) {
+  background: var(--grad-brand);
+  color: #fff;
+  box-shadow: var(--sh-2);
+}
+.mat-mdc-button-base.btn-danger:not(:disabled) {
+  --mat-button-filled-container-color: var(--danger);
+  --mat-button-outlined-label-text-color: var(--danger);
+  --mat-button-text-label-text-color: var(--danger);
+}
+
+/* Tablas de datos */
+.data-table {
+  width: 100%;
+
+  th.mat-mdc-header-cell {
+    background: var(--ink-50);
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    white-space: nowrap;
+    border-bottom-color: var(--ink-200);
+  }
+  td.mat-mdc-cell {
+    white-space: nowrap;
+  }
+  .num {
+    text-align: right;
+    justify-content: flex-end;
+  }
+}
+
+/* Snackbar tipo "toast" */
+.app-toast {
+  --mat-snack-bar-supporting-text-weight: 600;
+}
+
+.material-symbols-outlined {
+  font-variation-settings: 'wght' 400, 'opsz' 24;
+}
+
+/* Campos con fondo blanco sobre superficies grises */
+.field-white .mat-mdc-text-field-wrapper {
+  background: var(--white);
+  border-radius: var(--r-sm);
+}

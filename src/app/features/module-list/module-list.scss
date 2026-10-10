@@ -1,0 +1,82 @@
+@use '@angular/material' as mat;
+
+.toolbar {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+.tools {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  flex-wrap: wrap;
+}
+.search {
+  width: 280px;
+  max-width: 100%;
+  @include mat.form-field-density(-4);
+}
+.new-btn {
+  height: 44px;
+  font-weight: 700;
+}
+
+.chips {
+  @include mat.chips-overrides(
+    (
+      container-shape-radius: 999px,
+      outline-color: var(--ink-200),
+      label-text-color: var(--ink-700),
+      label-text-weight: 600,
+      elevated-selected-container-color: var(--ink-900),
+      selected-label-text-color: #fff,
+      flat-selected-outline-width: 0,
+    )
+  );
+}
+
+.table-wrap {
+  overflow: auto;
+  table {
+    min-width: 760px;
+  }
+}
+.data-table.compact {
+  @include mat.table-density(-3);
+}
+tr.clickable {
+  cursor: pointer;
+}
+tr.mat-mdc-row:hover {
+  background: var(--ink-50);
+}
+.actions-col {
+  width: 100px;
+  text-align: right;
+  white-space: nowrap;
+}
+.act {
+  color: var(--ink-500);
+  &.view {
+    color: var(--brand-600);
+  }
+  &.del:hover {
+    color: var(--danger);
+  }
+}
+
+.empty {
+  padding: 56px 24px;
+  text-align: center;
+}
+.empty-title {
+  font-size: 16px;
+  font-weight: 700;
+}
+.empty-desc {
+  font-size: 14px;
+  color: var(--ink-500);
+  margin-top: 6px;
+}

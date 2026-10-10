@@ -1,0 +1,56 @@
+import { Db } from './models';
+
+export const SEED: Db = {
+  usuarios: [
+    { id: 'u1', nombre: 'Valeria Ríos', email: 'valeria.rios@empresa.com', rol: 'Administrador', ultimo: '10/10/2026 08:12', estado: 'Activo' },
+    { id: 'u2', nombre: 'Martín Quispe', email: 'martin.quispe@empresa.com', rol: 'Vendedor', ultimo: '09/10/2026 18:40', estado: 'Activo' },
+    { id: 'u3', nombre: 'Lucía Fernández', email: 'lucia.fernandez@empresa.com', rol: 'Almacén', ultimo: '09/10/2026 16:05', estado: 'Activo' },
+    { id: 'u4', nombre: 'Diego Paredes', email: 'diego.paredes@empresa.com', rol: 'Auditor', ultimo: '07/10/2026 11:22', estado: 'Activo' },
+    { id: 'u5', nombre: 'Carla Mendoza', email: 'carla.mendoza@empresa.com', rol: 'Vendedor', ultimo: '21/09/2026 09:47', estado: 'Inactivo' },
+  ],
+  clientes: [
+    { id: 'c1', nombre: 'Comercial Andina S.A.C.', ruc: '20512345671', contacto: 'Rosa Huamán', telefono: '987 451 220', ciudad: 'Lima', estado: 'Activo' },
+    { id: 'c2', nombre: 'Ferretería El Progreso', ruc: '20603321984', contacto: 'Jorge Salazar', telefono: '956 112 873', ciudad: 'Arequipa', estado: 'Activo' },
+    { id: 'c3', nombre: 'Constructora Horizonte', ruc: '20488776512', contacto: 'Ana Villanueva', telefono: '944 870 115', ciudad: 'Trujillo', estado: 'Activo' },
+    { id: 'c4', nombre: 'Inversiones Del Sur E.I.R.L.', ruc: '20601987345', contacto: 'Pedro Cárdenas', telefono: '913 225 640', ciudad: 'Cusco', estado: 'Inactivo' },
+    { id: 'c5', nombre: 'Distribuidora Norte', ruc: '20577120983', contacto: 'Milagros Torres', telefono: '962 330 418', ciudad: 'Piura', estado: 'Activo' },
+    { id: 'c6', nombre: 'Grupo Pacasmayo Obras', ruc: '20455019876', contacto: 'Luis Rojas', telefono: '978 004 552', ciudad: 'Chiclayo', estado: 'Activo' },
+  ],
+  proveedores: [
+    { id: 'p1', nombre: 'Aceros Industriales S.A.', ruc: '20100123456', rubro: 'Metales', contacto: 'Raúl Medina', telefono: '01 422 1180', estado: 'Activo' },
+    { id: 'p2', nombre: 'Cementos Unidos', ruc: '20200987654', rubro: 'Construcción', contacto: 'Sofía Llanos', telefono: '01 615 3300', estado: 'Activo' },
+    { id: 'p3', nombre: 'Maderas del Oriente', ruc: '20301456789', rubro: 'Madera', contacto: 'Hugo Pinedo', telefono: '065 231 448', estado: 'Activo' },
+    { id: 'p4', nombre: 'PlastiPerú', ruc: '20409876123', rubro: 'Plásticos', contacto: 'Elena Vargas', telefono: '01 330 7721', estado: 'Inactivo' },
+    { id: 'p5', nombre: 'Eléctrica Central', ruc: '20511223344', rubro: 'Eléctricos', contacto: 'Carlos Ramos', telefono: '01 448 9012', estado: 'Activo' },
+  ],
+  materiales: [
+    { id: 'm1', codigo: 'MAT-001', nombre: 'Cemento Portland 42.5 kg', categoria: 'Construcción', unidad: 'Bolsa', stock: 420, min: 100, precio: 28.5, proveedorId: 'p2' },
+    { id: 'm2', codigo: 'MAT-002', nombre: 'Fierro corrugado 1/2"', categoria: 'Metales', unidad: 'Varilla', stock: 85, min: 120, precio: 42.9, proveedorId: 'p1' },
+    { id: 'm3', codigo: 'MAT-003', nombre: 'Tablero MDF 18 mm', categoria: 'Madera', unidad: 'Plancha', stock: 64, min: 30, precio: 118, proveedorId: 'p3' },
+    { id: 'm4', codigo: 'MAT-004', nombre: 'Tubo PVC 4" x 3 m', categoria: 'Plásticos', unidad: 'Unidad', stock: 210, min: 50, precio: 24.8, proveedorId: 'p4' },
+    { id: 'm5', codigo: 'MAT-005', nombre: 'Cable THW 14 AWG', categoria: 'Eléctricos', unidad: 'Rollo', stock: 18, min: 25, precio: 189, proveedorId: 'p5' },
+    { id: 'm6', codigo: 'MAT-006', nombre: 'Alambre negro N.º 16', categoria: 'Metales', unidad: 'Kg', stock: 330, min: 80, precio: 6.4, proveedorId: 'p1' },
+    { id: 'm7', codigo: 'MAT-007', nombre: 'Ladrillo King Kong 18 huecos', categoria: 'Construcción', unidad: 'Millar', stock: 12, min: 5, precio: 980, proveedorId: 'p2' },
+    { id: 'm8', codigo: 'MAT-008', nombre: 'Interruptor doble', categoria: 'Eléctricos', unidad: 'Unidad', stock: 150, min: 40, precio: 14.9, proveedorId: 'p5' },
+  ],
+  pedidos: [
+    { id: 'o1', codigo: 'PED-1048', clienteId: 'c1', fecha: '10/10/2026', estado: 'Pendiente', items: [{ matId: 'm1', qty: 120, precio: 28.5 }, { matId: 'm2', qty: 60, precio: 42.9 }] },
+    { id: 'o2', codigo: 'PED-1047', clienteId: 'c3', fecha: '09/10/2026', estado: 'En proceso', items: [{ matId: 'm7', qty: 4, precio: 980 }, { matId: 'm6', qty: 50, precio: 6.4 }, { matId: 'm1', qty: 80, precio: 28.5 }] },
+    { id: 'o3', codigo: 'PED-1046', clienteId: 'c2', fecha: '08/10/2026', estado: 'Enviado', items: [{ matId: 'm5', qty: 6, precio: 189 }, { matId: 'm8', qty: 40, precio: 14.9 }] },
+    { id: 'o4', codigo: 'PED-1045', clienteId: 'c5', fecha: '07/10/2026', estado: 'Entregado', items: [{ matId: 'm4', qty: 35, precio: 24.8 }] },
+    { id: 'o5', codigo: 'PED-1044', clienteId: 'c6', fecha: '05/10/2026', estado: 'Entregado', items: [{ matId: 'm3', qty: 20, precio: 118 }, { matId: 'm1', qty: 30, precio: 28.5 }] },
+    { id: 'o6', codigo: 'PED-1043', clienteId: 'c4', fecha: '03/10/2026', estado: 'Cancelado', items: [{ matId: 'm2', qty: 15, precio: 42.9 }] },
+    { id: 'o7', codigo: 'PED-1042', clienteId: 'c1', fecha: '01/10/2026', estado: 'Entregado', items: [{ matId: 'm6', qty: 100, precio: 6.4 }, { matId: 'm8', qty: 25, precio: 14.9 }] },
+  ],
+  auditoria: [
+    { id: 'a1', fecha: '10/10/2026 08:12', usuario: 'Valeria Ríos', modulo: 'Sesión', accion: 'Inició sesión', detalle: 'Acceso desde navegador web' },
+    { id: 'a2', fecha: '10/10/2026 08:05', usuario: 'Martín Quispe', modulo: 'Pedidos', accion: 'Creó', detalle: 'PED-1048 para Comercial Andina S.A.C.' },
+    { id: 'a3', fecha: '09/10/2026 17:30', usuario: 'Lucía Fernández', modulo: 'Pedidos', accion: 'Cambió estado', detalle: 'PED-1046: En proceso → Enviado' },
+    { id: 'a4', fecha: '09/10/2026 15:48', usuario: 'Lucía Fernández', modulo: 'Materiales', accion: 'Editó', detalle: 'Stock de Cable THW 14 AWG actualizado' },
+    { id: 'a5', fecha: '09/10/2026 11:02', usuario: 'Martín Quispe', modulo: 'Pedidos', accion: 'Creó', detalle: 'PED-1047 para Constructora Horizonte' },
+    { id: 'a6', fecha: '08/10/2026 16:20', usuario: 'Valeria Ríos', modulo: 'Proveedores', accion: 'Editó', detalle: 'PlastiPerú marcado como Inactivo' },
+    { id: 'a7', fecha: '07/10/2026 10:14', usuario: 'Valeria Ríos', modulo: 'Usuarios', accion: 'Creó', detalle: 'Diego Paredes (Auditor)' },
+    { id: 'a8', fecha: '03/10/2026 09:40', usuario: 'Martín Quispe', modulo: 'Pedidos', accion: 'Cambió estado', detalle: 'PED-1043: Pendiente → Cancelado' },
+    { id: 'a9', fecha: '02/10/2026 14:55', usuario: 'Valeria Ríos', modulo: 'Clientes', accion: 'Eliminó', detalle: 'Comercial Lima Centro' },
+  ],
+};

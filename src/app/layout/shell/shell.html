@@ -1,0 +1,62 @@
+<div class="layout">
+  <mat-toolbar class="topbar">
+    <button mat-icon-button (click)="store.sidebarCollapsed.set(!store.sidebarCollapsed())"
+      [attr.aria-label]="collapsed() ? 'Expandir menú' : 'Contraer menú'">
+      <mat-icon>menu</mat-icon>
+    </button>
+    <div class="brand">
+      <div class="brand-mark">N</div>
+      <div class="brand-name">NÚCLEO</div>
+      <div class="sep"></div>
+      <div class="crumb">{{ crumb() }}</div>
+    </div>
+
+    <button class="user-btn" [matMenuTriggerFor]="userMenu">
+      <span class="avatar">{{ initials() }}</span>
+      <span class="user-text">
+        <span class="user-name">{{ store.user()?.nombre }}</span>
+        <span class="user-role">{{ store.user()?.rol }}</span>
+      </span>
+      <mat-icon>expand_more</mat-icon>
+    </button>
+    <mat-menu #userMenu="matMenu" xPosition="before" class="user-menu">
+      <div class="menu-head">
+        <div class="menu-name">{{ store.user()?.nombre }}</div>
+        <div class="menu-email">{{ store.user()?.email }}</div>
+      </div>
+      <mat-divider />
+      <button mat-menu-item (click)="store.density.set(store.density() === 'compact' ? 'comfortable' : 'compact')">
+        <mat-icon>{{ store.density() === 'compact' ? 'density_medium' : 'density_small' }}</mat-icon>
+        <span>{{ store.density() === 'compact' ? 'Vista cómoda' : 'Vista compacta' }}</span>
+      </button>
+      <button mat-menu-item class="logout" (click)="logout()">
+        <mat-icon>logout</mat-icon>
+        <span>Cerrar sesión</span>
+      </button>
+    </mat-menu>
+  </mat-toolbar>
+
+  <mat-sidenav-container class="body" autosize>
+    <mat-sidenav mode="side" opened disableClose class="sidenav" [class.collapsed]="collapsed()">
+      @if (!collapsed()) {
+        <div class="nav-title">MÓDULOS</div>
+      }
+      <mat-nav-list>
+        @for (m of navItems(); track m.id) {
+          <a mat-list-item [routerLink]="['/', m.id]" routerLinkActive="active" #rla="routerLinkActive"
+            [activated]="rla.isActive" [matTooltip]="m.label" matTooltipPosition="right"
+            [matTooltipDisabled]="!collapsed()">
+            <mat-icon matListItemIcon>{{ m.icon }}</mat-icon>
+            @if (!collapsed()) {
+              <span matListItemTitle>{{ m.label }}</span>
+            }
+          </a>
+        }
+      </mat-nav-list>
+    </mat-sidenav>
+
+    <mat-sidenav-content class="content">
+      <router-outlet />
+    </mat-sidenav-content>
+  </mat-sidenav-container>
+</div>

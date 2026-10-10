@@ -1,0 +1,76 @@
+<div class="page fade-up">
+  <div class="toolbar">
+    <div>
+      <h1 class="page-title">{{ mod().label }}</h1>
+      <div class="page-sub">{{ countLabel() }}</div>
+    </div>
+    <div class="tools">
+      <mat-form-field class="search field-white">
+        <mat-icon matPrefix>search</mat-icon>
+        <input matInput [placeholder]="'Buscar en ' + mod().label.toLowerCase() + '…'" [value]="search()"
+          (input)="search.set($any($event.target).value)" aria-label="Buscar" />
+      </mat-form-field>
+      @if (!mod().readOnly) {
+        <button mat-flat-button class="btn-brand new-btn" (click)="openNew()">
+          <mat-icon>add</mat-icon>
+          Nuevo {{ mod().singular }}
+        </button>
+      }
+    </div>
+  </div>
+
+  <mat-chip-listbox class="chips" aria-label="Filtro" [value]="filter()" (change)="filter.set($event.value ?? 'Todos')"
+    hideSingleSelectionIndicator>
+    @for (c of chips(); track c) {
+      <mat-chip-option [value]="c" [selectable]="filter() !== c">{{ c }}</mat-chip-option>
+    }
+  </mat-chip-listbox>
+
+  <div class="panel table-wrap">
+    <table mat-table [dataSource]="rows()" class="data-table" [class.compact]="store.density() === 'compact'">
+      @for (col of columns(); track col.key) {
+        <ng-container [matColumnDef]="col.key">
+          <th mat-header-cell *matHeaderCellDef [class.num]="col.right">{{ col.label }}</th>
+          <td mat-cell *matCellDef="let row" [class.num]="col.right">
+            @let cell = row.cells[col.key];
+            @if (cell.badge) {
+              <span class="badge" [style.background]="cell.bg" [style.color]="cell.fg">{{ cell.text }}</span>
+            } @else {
+              <span [class.mono]="cell.mono" [style.color]="cell.color" [style.font-weight]="cell.strong ? 600 : 400">
+                {{ cell.text }}
+              </span>
+            }
+          </td>
+        </ng-container>
+      }
+
+      <ng-container matColumnDef="actions">
+        <th mat-header-cell *matHeaderCellDef class="actions-col"></th>
+        <td mat-cell *matCellDef="let row" class="actions-col">
+          @if (module() === 'pedidos') {
+            <button mat-icon-button class="act view" matTooltip="Ver detalle" (click)="$event.stopPropagation(); open(row)">
+              <mat-icon>visibility</mat-icon>
+            </button>
+          } @else {
+            <button mat-icon-button class="act" matTooltip="Editar" (click)="edit($event, row)">
+              <mat-icon>edit</mat-icon>
+            </button>
+          }
+          <button mat-icon-button class="act del" matTooltip="Eliminar" (click)="remove($event, row)">
+            <mat-icon>delete</mat-icon>
+          </button>
+        </td>
+      </ng-container>
+
+      <tr mat-header-row *matHeaderRowDef="displayed()"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayed()" (click)="open(row)" [class.clickable]="!mod().readOnly"></tr>
+    </table>
+
+    @if (rows().length === 0) {
+      <div class="empty">
+        <div class="empty-title">Sin resultados</div>
+        <div class="empty-desc">Prueba con otra búsqueda o filtro.</div>
+      </div>
+    }
+  </div>
+</div>

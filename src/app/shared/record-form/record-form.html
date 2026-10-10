@@ -1,0 +1,33 @@
+<div class="head">
+  <h2 mat-dialog-title>{{ title() }}</h2>
+  <button mat-icon-button mat-dialog-close aria-label="Cerrar"><mat-icon>close</mat-icon></button>
+</div>
+
+<form (ngSubmit)="save()" id="record-form">
+  <mat-dialog-content class="grid">
+    @for (f of fields(); track f.key) {
+      <mat-form-field>
+        <mat-label>{{ f.label }}</mat-label>
+        @if (f.options) {
+          <mat-select [value]="form()[f.key]" (valueChange)="set(f.key, $event)">
+            @for (o of f.options; track o.value) {
+              <mat-option [value]="o.value">{{ o.label }}</mat-option>
+            }
+          </mat-select>
+        } @else {
+          <input matInput [type]="f.type ?? 'text'" [name]="f.key" [value]="form()[f.key]"
+            (input)="set(f.key, $any($event.target).value)" [attr.min]="f.type === 'number' ? 0 : null" />
+        }
+      </mat-form-field>
+    }
+  </mat-dialog-content>
+</form>
+
+@if (error()) {
+  <div class="alert-danger error" role="alert">{{ error() }}</div>
+}
+
+<mat-dialog-actions align="end">
+  <button mat-stroked-button mat-dialog-close>Cancelar</button>
+  <button mat-flat-button class="btn-brand" type="submit" form="record-form">Guardar</button>
+</mat-dialog-actions>
